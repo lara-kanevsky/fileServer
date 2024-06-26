@@ -15,7 +15,6 @@ child.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
 });
 
-// Handle any errors that occur
 child.on('error', (err) => {
     console.error('Error executing http-server:', err);
 });
