@@ -1,32 +1,17 @@
-const { exec } = require('child_process');
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
 
-// Command to start http-server on port 8080
-const command = 'npx http-server --cors -p 8080';
+const app = express();
 
-// Execute the command
-const child = exec(command);
+// Enable CORS for all origins
+app.use(cors());
 
-// Handle stdout and stderr from the child process
-child.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-});
+// Serve files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-child.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-});
-
-child.on('error', (err) => {
-    console.error('Error executing http-server:', err);
-});
-
-// Handle when the http-server process exits
-child.on('exit', (code, signal) => {
-    console.log(`http-server process exited with code ${code} and signal ${signal}`);
-});
-
-// Gracefully stop http-server when Node.js process exits
-process.on('SIGINT', () => {
-    console.log('\nStopping http-server...');
-    child.kill();
-    process.exit();
+// Start server
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
